@@ -145,7 +145,7 @@ class Score:
         self.color = (0, 0, 255)
         self.score = 0
         self.img = self.fonto.render(f"スコア：{self.score}", 0, self.color)
-        self.centery = (100, 50)
+        self.centery = (100, 850)  # 修正
     
     def update(self, point, screen):
         """
