@@ -157,32 +157,6 @@ class Score:
         screen.blit(self.img, self.centery)
 
 
-class Explosion:
-    """
-    爆弾を撃墜した際に爆発するようにする
-    """
-    def __init__(self):
-        """
-        数値の初期化
-        引数 source:起爆位置
-        """
-        self.img0 = pg.transform.rotozoom(pg.image.load("fig/explosion.gif"), 0, 1.0)
-        self.img = pg.transform.flip(self.img0, True, False)
-
-        self.img_lst = [self.img0, self.img] 
-        self.life = 3
-    
-    def update(self, surface, target_center):
-        """
-        爆発のエフェクトを画面に表示
-        引数 surface:画面surface target_center:爆発した爆弾の中心
-        """
-        self.life -= 1
-        if self.life > 0:
-            surface.blit(self.img_lst[self.life%2], target_center)
-
-
-
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -192,7 +166,6 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     beam = None
     beams = []
-    exps = []
     score = Score()
     clock = pg.time.Clock()
     tmr = 0
@@ -223,12 +196,9 @@ def main():
                         beams[j] = None
                         bombs[i] = None
                         bird.change_img(6, screen)
-                        exp = Explosion()
-                        exps.append(exp)
                         pg.display.update()
         bombs = [bomb for bomb in bombs if bomb is not None]
         beams = [beam for beam in beams if beam is not None]
-        exps = [exp for exp in exps if exp.life > 0]
         score.update(5 - len(bombs), screen)
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
@@ -236,8 +206,6 @@ def main():
             bomb.update(screen)
         for beam in beams:
             beam.update(screen)
-        for exp in exps:
-            exp.update(screen, bomb[i].rct.centery)
         
         pg.display.update()
         tmr += 1
